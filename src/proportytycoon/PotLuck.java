@@ -1,13 +1,13 @@
 package proportytycoon;
 
 public class PotLuck extends Tile{
+
     /**
-     * Instantiates a 'PotLuck' tile.
-     * @param name The name of this tile.
-     * @param buyable Is this tile purchasable.
+     * Instantiates a 'PotLuck' object.
+     * @param data Data associated with this Tile.
      */
-    public PotLuck(String name, String buyable) {
-        super(name, buyable);
+    public PotLuck(String[] data) {
+        super(data);
     }
     
 }

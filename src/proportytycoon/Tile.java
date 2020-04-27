@@ -1,18 +1,18 @@
 package proportytycoon;
 
-public class Tile {
+public abstract class Tile {
     
     String name;
     Boolean buyable;
     
     /**
      * Instantiates a Tile object.
-     * @param name The name of this tile.
-     * @param buyable Whether this tile is purchasable.
+     * @param data Data associated with this Tile
      */
-    public Tile(String name, String buyable){
-        this.name = name;
-        this.buyable = Boolean.parseBoolean(buyable);
+    public Tile(String[] data){
+        this.name = data[1];
+        this.buyable = Boolean.parseBoolean(data[2]);
+        System.out.println("Tile: " + getName() + " created. Buyable: " + String.valueOf(getBuyable()));
     }
     
     /**

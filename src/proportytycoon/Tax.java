@@ -1,13 +1,13 @@
 package proportytycoon;
 
 public class Tax extends Tile{
+    
     /**
-     * Instantiates a 'Tax' tile.
-     * @param name The name of this tile.
-     * @param buyable Is this tile purchasable?
+     * Instantiates a 'Tax' object.
+     * @param data Data associated with this Tile
      */
-    public Tax(String name, String buyable) {
-        super(name, buyable);
+    public Tax(String[] data) {
+        super(data);
     }
     
 }

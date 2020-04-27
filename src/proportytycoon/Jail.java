@@ -1,13 +1,13 @@
 package proportytycoon;
 
 public class Jail extends Tile{
+    
     /**
      * Instantiates a 'Jail' tile.
-     * @param name The name of this tile.
-     * @param buyable Is this tile purchasable?
+     * @param data Data associated with this Tile
      */
-    public Jail(String name, String buyable) {
-        super(name, buyable);
+    public Jail(String[] data) {
+        super(data);
     }
     
 }

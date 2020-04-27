@@ -1,13 +1,13 @@
 package proportytycoon;
 
 public class OppKnocks extends Tile{
+    
     /**
      * Instantiates an 'OppKnocks' tile.
-     * @param name The name of this tile.
-     * @param buyable Is this tile purchasable.
+     * @param data Data associated with this Tile
      */
-    public OppKnocks(String name, String buyable) {
-        super(name, buyable);
+    public OppKnocks(String[] data) {
+        super(data);
     }
     
 }
