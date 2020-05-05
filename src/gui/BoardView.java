@@ -7,18 +7,14 @@ package gui;
 
 import com.sun.glass.ui.Screen;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.geometry.Bounds;
 import javafx.scene.image.Image;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Path;
 
@@ -42,16 +38,17 @@ public class BoardView extends StackPane {
     private Point2D[] pointArray;
     private Image boardImage;
     private static BoardView instance;
-    private Group imageGroup;
+    private DiceGUI dicegui;
+
     
-    public BoardView(double l) {
+    public BoardView(double l) throws FileNotFoundException {
         tokens = new Token[10];
 
         this.length = l;
         spacePaths = new HashMap<>(); 
         
         File f = new File("./assets/pt_board.png");
-        boardImage = new Image(f.toURI().toString(),Screen.getMainScreen().getHeight(),Screen.getMainScreen().getHeight(),false,false);
+        boardImage = new Image(f.toURI().toString(),Screen.getMainScreen().getHeight(),Screen.getMainScreen().getHeight(),false,true);
         
 //        BackgroundImage backgroundImage = new BackgroundImage(boardImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
 //        BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
@@ -60,10 +57,16 @@ public class BoardView extends StackPane {
 //        Background background = new Background(backgroundImage);
 //        setBackground(background);
         ImageView iv = new ImageView(boardImage);
-        this.getChildren().add(iv);
         createPaths();
         placeTokens();
         System.out.println("this is " + iv.getBoundsInParent());
+        
+        dicegui = new DiceGUI();
+        Group group = new Group(iv, dicegui);
+        this.getChildren().add(group);
+        dicegui.setTranslateX(600);
+        dicegui.setTranslateY(750);
+
     }
     
     public static BoardView getInstance() {

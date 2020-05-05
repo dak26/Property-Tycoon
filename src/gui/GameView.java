@@ -6,6 +6,7 @@
 package gui;
 
 import com.sun.glass.ui.Screen;
+import java.io.FileNotFoundException;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
@@ -18,7 +19,7 @@ import javafx.scene.layout.StackPane;
  */
 public class GameView extends BorderPane {
     
-    public GameView(double width, double height) {
+    public GameView(double width, double height) throws FileNotFoundException {
         setPrefHeight(height);
         setPrefWidth(width);
         setCenter(new BoardView(height));

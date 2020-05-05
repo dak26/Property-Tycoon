@@ -14,6 +14,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import gui.GameView;
+import java.io.FileNotFoundException;
 
 
 /**
@@ -30,7 +31,7 @@ public class Welcome extends Application {
     }
     
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws FileNotFoundException {
         primaryStage.setWidth(Screen.getMainScreen().getWidth());
         primaryStage.setHeight(Screen.getMainScreen().getHeight());
         StackPane root = new StackPane();
