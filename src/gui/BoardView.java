@@ -7,16 +7,22 @@ package gui;
 
 import com.sun.glass.ui.Screen;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.HashMap;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.geometry.Bounds;
 import javafx.scene.image.Image;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Path;
+import tile.Tile;
 
 /**
  * The BoardView class contains the board representation with its tokens.
@@ -29,45 +35,19 @@ import javafx.scene.shape.Path;
 // It will display the tokens, dice and cards. Players will see their token move
 // across the board when they roll the dice.
 
-public class BoardView extends StackPane {
+public class BoardView extends AnchorPane {
     
     // private File image("board-design"); This will be the image that serves as the board
-    private Token[] tokens;
-    private double length;
-    private HashMap<Integer, Point2D[]> spacePaths;
-    private Point2D[] pointArray;
-    private Image boardImage;
     private static BoardView instance;
-    private DiceGUI dicegui;
-
+    private double length;
+    private Token[] tokens;
+    private HashMap<Integer, Point2D[]> spacePaths;
+    private Point2D[][] pointArray;
+    private Image boardImage;
+    private ImageView iv;
+    private Group imageGroup;   
     
-    public BoardView(double l) throws FileNotFoundException {
-        tokens = new Token[10];
-
-        this.length = l;
-        spacePaths = new HashMap<>(); 
-        
-        File f = new File("./assets/pt_board.png");
-        boardImage = new Image(f.toURI().toString(),Screen.getMainScreen().getHeight(),Screen.getMainScreen().getHeight(),false,true);
-        
-//        BackgroundImage backgroundImage = new BackgroundImage(boardImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
-//        BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
-//        this.setMinSize(boardImage.getWidth(), boardImage.getHeight());
-//        
-//        Background background = new Background(backgroundImage);
-//        setBackground(background);
-        ImageView iv = new ImageView(boardImage);
-        createPaths();
-        placeTokens();
-        System.out.println("this is " + iv.getBoundsInParent());
-        
-        dicegui = new DiceGUI();
-        Group group = new Group(iv, dicegui);
-        this.getChildren().add(group);
-        dicegui.setTranslateX(600);
-        dicegui.setTranslateY(750);
-
-    }
+    private BoardView() {}
     
     public static BoardView getInstance() {
         if (instance == null) {
@@ -76,7 +56,31 @@ public class BoardView extends StackPane {
         return instance;
     }
     
-    private BoardView() {}
+    public void setUp(double l) {
+        tokens = new Token[10];
+
+        this.length = l;
+        spacePaths = new HashMap<>(); 
+        
+        File f = new File("./assets/pt_board.png");
+        boardImage = new Image(f.toURI().toString(),l,l,false,false);
+        
+//        BackgroundImage backgroundImage = new BackgroundImage(boardImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
+//        BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+//        this.setMinSize(boardImage.getWidth(), boardImage.getHeight());
+//        
+//        Background background = new Background(backgroundImage);
+//        setBackground(background);
+        iv = new ImageView(boardImage);
+        setImageSize(l*10/12);
+        this.setLeftAnchor(iv,10.0);
+        
+        this.getChildren().add(iv);
+        createPaths();
+        placeTokens();
+        System.out.println("this is " + iv.getBoundsInParent());
+    }
+
     
     public Image getImage() {
         return boardImage;
@@ -84,6 +88,12 @@ public class BoardView extends StackPane {
     
     public double getBoardLength() {
         return length;
+    }
+    
+    public void setImageSize(double l) {
+        iv.setPreserveRatio(true);
+        iv.setFitHeight(l);
+        iv.setFitWidth(l);
     }
     
     public void placeTokens() {
@@ -103,86 +113,52 @@ public class BoardView extends StackPane {
     
     // This creates new variables from pointA and pointB in the method createBoard()
     // It will keep a record of the coordinates after pointA and pointB are changed.
-    public Point2D[] newPoints(Point2D a, Point2D b) {
-        Point2D[] newPoints = new Point2D[]{new Point2D(a.getX(),a.getY()),
-            new Point2D(b.getX(),b.getY())};
-        return newPoints;
+    
+    public void createPointArray() {
+        double x = length/26;
+        for (int i = 0; i < 26; i++) {
+            for (int j = 0; j < 26; j++) {
+                Point2D pt = new Point2D((float)(i+0.5)*x,(float)(j+0.5)*x);
+                pointArray[i][j] = pt;
+            }
+        }
     }
     
-    public Path newPath(Point2D[] points) {
+    /**
+     * Moves the given token to the given tile.
+     * 
+     * @param token
+     * @param tile 
+     */
+    public void moveTokenToTile(Token token, Tile tile) {
         Path path = new Path();
-        return path;
+        path.getElements().add(new LineTo(token.getCoords(), selectPoint(tile)));
     }
     
-    public Point2D[] getPoints(int i) {
-        return spacePaths.get(i);
+    /**
+     * Finds the first non-occupied point in the tile.
+     * 
+     * @param tile
+     * @return 
+     */    
+    public Point2D selectPoint(Tile tile) {
+        Point2D pointToReturn = null;
+        for (Point2D point : tile.getPoints()) {
+            if (!isOccupied(point)) {
+                point = pointToReturn;
+                break;
+            }
+        }
     }
-    
-    public Path getPointPath(int i) {
-        return new Path();
-    }
-    
-    public void createPaths() {
-        pointArray = new Point2D[2];
-        double x = length/26; // this will be our unit
-        Point2D pointA = new Point2D(350 + 26 * x, 22 * x);
-        Point2D pointB = new Point2D(22 * x, 22 * x);
-        System.out.println(pointA);
-        spacePaths.put(0, newPoints(pointA, pointB));
-        
-        pointA.subtract(4 * x, 0);
-        pointB.subtract(2 * x, 0);
-        spacePaths.put(1, newPoints(pointA,pointB));
-        
-        for (int i = 2; i < 10; i++) {
-            pointA.subtract(2 * x, 0);
-            pointB.subtract(2 * x, 0);
-            spacePaths.put(i, newPoints(pointA,pointB));
-        }
-        
-        pointB.subtract(4 * x, 0);
-        pointA.subtract(2 * x, 0);
-        spacePaths.put(10, newPoints(pointA, pointB));
-        
-        pointB.add(2 * x, 6 * x);
-        pointA.add(-2 * x, 2 * x);
-        spacePaths.put(11, newPoints(pointA, pointB));
-        
-        for (int i = 12; i < 20; i++) {
-            pointA.add(0, 2 * x);
-            pointB.add(0, 2 * x);
-            spacePaths.put(i, newPoints(pointA,pointB));
-        }
-        
-        pointB.add(0, 4 * x);
-        pointA.add(0, 2 * x);
-        spacePaths.put(20, newPoints(pointA, pointB));
-        
-        pointB.add(6 * x, -2 * x);
-        pointA.add(2 * x, 2 * x);
-        spacePaths.put(21, newPoints(pointA, pointB));
-        
-        for (int i = 22; i < 30; i++) {
-            pointA.add(2 * x, 0);
-            pointB.add(2 * x, 0);
-            spacePaths.put(i, newPoints(pointA, pointB));
-        }
-        
-        pointB.add(4 * x, 0);
-        pointA.add(2 * x, 0);
-        spacePaths.put(30, newPoints(pointA, pointB));
-        
-        pointB.subtract(2 * x, 6 * x);
-        pointA.subtract(-2 * x, 2 * x);
-        spacePaths.put(31, newPoints(pointA, pointB));
-        
-        for (int i = 32; i < 40; i++) {
-            pointA.subtract(0, 2 * x);
-            pointB.subtract(0, 2 * x);
-            spacePaths.put(i, newPoints(pointA, pointB));
-        }
-        
-        
+            
+
+    /**
+     * Determines if a point is occupied by a token.
+     * 
+     * @param point
+     * @return 
+     */
+    private boolean isOccupied(Point2D point) {
         
     }
     
