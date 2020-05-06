@@ -8,6 +8,7 @@ package gui;
 import com.sun.glass.ui.Screen;
 import java.io.File;
 import java.util.HashMap;
+import javafx.animation.PathTransition;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.geometry.Bounds;
 import javafx.scene.image.Image;
@@ -21,7 +22,9 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.StackPane;
+import javafx.scene.shape.LineTo;
 import javafx.scene.shape.Path;
+import javafx.util.Duration;
 import tile.Tile;
 
 /**
@@ -57,10 +60,9 @@ public class BoardView extends AnchorPane {
     }
     
     public void setUp(double l) {
-        tokens = new Token[10];
+        tokens = new Token[6];
 
         this.length = l;
-        spacePaths = new HashMap<>(); 
         
         File f = new File("./assets/pt_board.png");
         boardImage = new Image(f.toURI().toString(),l,l,false,false);
@@ -74,9 +76,8 @@ public class BoardView extends AnchorPane {
         iv = new ImageView(boardImage);
         setImageSize(l*10/12);
         this.setLeftAnchor(iv,10.0);
-        
+        createPointArray();
         this.getChildren().add(iv);
-        createPaths();
         placeTokens();
         System.out.println("this is " + iv.getBoundsInParent());
     }
@@ -97,12 +98,9 @@ public class BoardView extends AnchorPane {
     }
     
     public void placeTokens() {
-        for (Token token : tokens) {
-            Token t =  new Token(spacePaths.get(0)[0],length);
-            getChildren().add(t);
-        }
-        
+        Token t = new Token(pointArray[22][2],length);
     }
+        
     
     // This is the underlying framework of the board. Each space will be mapped to
     // two points whose straight line bisects the space. Tokens will follow these
@@ -115,10 +113,10 @@ public class BoardView extends AnchorPane {
     // It will keep a record of the coordinates after pointA and pointB are changed.
     
     public void createPointArray() {
-        double x = length/26;
+        pointArray = new Point2D[26][26];
         for (int i = 0; i < 26; i++) {
             for (int j = 0; j < 26; j++) {
-                Point2D pt = new Point2D((float)(i+0.5)*x,(float)(j+0.5)*x);
+                Point2D pt = new Point2D((float)(i+0.5),(float)(j+0.5));
                 pointArray[i][j] = pt;
             }
         }
@@ -132,7 +130,16 @@ public class BoardView extends AnchorPane {
      */
     public void moveTokenToTile(Token token, Tile tile) {
         Path path = new Path();
-        path.getElements().add(new LineTo(token.getCoords(), selectPoint(tile)));
+        PathTransition pt = new PathTransition();
+        
+        Point2D coords = selectPoint(tile);
+        path.getElements().add(new LineTo(coords.getX(), coords.getY()));
+        
+        pt.setNode(token);
+        pt.setPath(path);
+        pt.setDuration(Duration.seconds(1));
+        
+        pt.play();        
     }
     
     /**
@@ -141,14 +148,15 @@ public class BoardView extends AnchorPane {
      * @param tile
      * @return 
      */    
-    public Point2D selectPoint(Tile tile) {
+    private Point2D selectPoint(Tile tile) {
         Point2D pointToReturn = null;
-        for (Point2D point : tile.getPoints()) {
+        for (Point2D point : tile.getCoordinates()) {
             if (!isOccupied(point)) {
-                point = pointToReturn;
+                pointToReturn = point;
                 break;
             }
         }
+        return pointToReturn;
     }
             
 
@@ -159,7 +167,13 @@ public class BoardView extends AnchorPane {
      * @return 
      */
     private boolean isOccupied(Point2D point) {
-        
+        boolean isOccupied = false;
+        for (Token t : tokens) {
+            if (t.getPos() == point) {
+                isOccupied = true;
+            }
+        }
+        return isOccupied;
     }
     
 
