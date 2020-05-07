@@ -31,7 +31,7 @@ public class Property extends Tile {
      */
     public int[] getRentPrices(String[] row){
         int[] rentprices = new int[row.length-5];
-        for (int i = 0; i > row.length - 1; i++){
+        for (int i = 0; i < row.length - 1; i++){
             rentprices[i] = Integer.parseInt(row[i+6]);
         }
         return rentprices;
