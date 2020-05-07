@@ -10,12 +10,17 @@ import java.lang.reflect.InvocationTargetException;
 
 
 public class Testing {
-	String[] data= {"Property","cookie","true","RED","9999"};
 	
+	String[] data;
+	
+	public Testing(String[] data) {
+		this.data=data;
+	}
 	@org.junit.Test
 	public void testTile() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
-		Constructor<?> cnstr=Class.forName("Property").getConstructor(String[].class);
-		Tile player=(Property) cnstr.newInstance(new Object[] {data});
+		/*Constructor<?> cnstr=Class.forName("Property").getConstructor(String[].class);
+		Tile player=(Property) cnstr.newInstance(new Object[] {data});*/
+		Tile player=new Property(data);
 		
 		assertEquals(data[1],player.getName());
 		assertEquals(Boolean.parseBoolean(data[2]),player.getBuyable());
@@ -25,7 +30,7 @@ public class Testing {
 	public void testProperty() {
 		assertEquals(data[3],Colour.RED);
 		assertEquals(Integer.parseInt(data[4]),9999);
-		//assertEquals(rentprice)
+		//assertEquals(data,player.getRentPrice);
 	}
 	
 	@org.junit.Test
@@ -58,5 +63,11 @@ public class Testing {
 		//assertEquals(data[],parking);
 	}
 	
-	
+
+
+public static void main(String[] args) {
+	String[] testData= {"Property","cookie","true","RED","9999"};
+	Testing a=new Testing(testData); 
+}
+
 }
