@@ -1,73 +1,88 @@
 package proportytycoon;
+import static org.junit.Assert.assertArrayEquals;
 /**
 
 * @author Yang
 */
 import static org.junit.Assert.assertEquals;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import org.junit.Test;
 
 
 public class Testing {
 	
-	String[] data;
-	
-	public Testing(String[] data) {
-		this.data=data;
-	}
-	@org.junit.Test
-	public void testTile() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException {
-		/*Constructor<?> cnstr=Class.forName("Property").getConstructor(String[].class);
-		Tile player=(Property) cnstr.newInstance(new Object[] {data});*/
+	@Test
+	public void testTile(){
+		String[] data= {"Property","Crapper Street","true","BROWN","60","2","10","30","90","160","250"};
 		Tile player=new Property(data);
 		
 		assertEquals(data[1],player.getName());
 		assertEquals(Boolean.parseBoolean(data[2]),player.getBuyable());
 	}
 	
-	@org.junit.Test
+	@Test
 	public void testProperty() {
-		assertEquals(data[3],Colour.RED);
-		assertEquals(Integer.parseInt(data[4]),9999);
-		//assertEquals(data,player.getRentPrice);
+		String[] data= {"Property","Crapper Street","true","BROWN","60","2","10","30","90","160","250"};
+		Property ppty=new Property(data);
+		Colour colour=Colour.BROWN;
+		int[] rentPrices= {2,10,30,90,160,250};
+		
+		assertEquals(colour,Colour.BROWN);
+		assertEquals(Integer.parseInt(data[4]),ppty.cost);
+		assertArrayEquals(rentPrices,ppty.getRentPrices(data));
+		
 	}
 	
-	@org.junit.Test
+	@Test
 	public void testTax() {
 		//assertEquals(data[],tax);
+		return ;
 	}
 	
-	@org.junit.Test
+	@Test
 	public void testLuck() {
 		//assertEquals(data[],luck);
+		return ;
 	}
 	
-	@org.junit.Test
+	@Test
 	public void testOpp() {
 		//assertEquals(data[],opp);
+		return ;
 	}
 	
-	@org.junit.Test
+	@Test
 	public void testJail() {
 		//assertEquals(data[],jail);
+		return ;
 	}
 	
-	@org.junit.Test
+	@Test
 	public void testGo() {
 		//assertEquals(data[],go);
+		return ;
 	}
 	
-	@org.junit.Test
+	@Test
 	public void testParking() {
 		//assertEquals(data[],parking);
+		return ;
 	}
 	
 
 
 public static void main(String[] args) {
-	String[] testData= {"Property","cookie","true","RED","9999"};
-	Testing a=new Testing(testData); 
+	
+	Testing a=new Testing();
+	
+	a.testTile();
+	a.testGo();
+	a.testJail();
+	a.testLuck();
+	a.testOpp();
+	a.testParking();
+	a.testProperty();
+	a.testTax();
 }
 
 }
