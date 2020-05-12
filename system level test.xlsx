@@ -1,0 +1,11 @@
+Inputs	Expected Outputs	Actual Outputs	Pass/Fail
+NONE	New game	NONE	Fail
+None	Load stored game	NONE	Fail
+None	Rules screen	NONE	Fail
+NONE	the game is started	NONE	Fail
+NONE	open a trade screen	NONE	Fail
+NONE	stop the game	NONE	Fail
+NONE	stores the game	NONE	Fail
+NONE	open a set screen	NONE	Fail
+NONE	exit the game	NONE	Fail
+username(string) and password(string) (valid)	process to login screen	even no login function	Fail
