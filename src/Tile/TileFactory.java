@@ -3,7 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package tile;
+package Tile;
+
+import Tile.Tile;
+import Tile.Tax;
+import Tile.Property;
+import Tile.PotLuck;
+import Tile.OppKnocks;
+import Tile.Jail;
+import Tile.Go;
+import Tile.FreeParking;
 
 /**
  *

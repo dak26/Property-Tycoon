@@ -22,7 +22,7 @@ public class GameView extends BorderPane {
     public GameView(double width, double height) throws FileNotFoundException {
         setPrefHeight(height);
         setPrefWidth(width);
-        setCenter(new BoardView(height));
+        setCenter(new BoardView());
         setBottom(new StackPane());                
     }
     

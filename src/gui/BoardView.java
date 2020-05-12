@@ -18,7 +18,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.Path;
 import javafx.util.Duration;
-import tile.Tile;
+import Tile.Tile;
+import java.io.FileNotFoundException;
+import javafx.scene.layout.StackPane;
 
 /**
  * The BoardView class contains the board representation with its tokens.
@@ -41,30 +43,41 @@ public class BoardView extends Pane {
     private Point2D[][] pointArray;
     private Image boardImage;
     private Group imageGroup;   
+    private DiceGUI dice;
     
-    private BoardView() {}
+    public BoardView() throws FileNotFoundException {
+        setUp(1000);
+    }
     
-    public static BoardView getInstance() {
+    public static BoardView getInstance() throws FileNotFoundException {
         if (instance == null) {
             instance = new BoardView();
         }
         return instance;
     }
     
-    public void setUp(double l) {
+    public void setUp(double l) throws FileNotFoundException {
+        StackPane stack = new StackPane();
         setPrefSize(l,l);
         tokens = new Token[6];
 
         this.length = l;
         
         File f = new File("./assets/pt_board.png");
-        boardImage = new Image(f.toURI().toString(),l,l,false,false);
+        boardImage = new Image(f.toURI().toString(),l,l,false,true);
         
         Canvas canvas = new Canvas(length,length);
         GraphicsContext gc = canvas.getGraphicsContext2D();
         
         gc.drawImage(boardImage, 0, 0);
-        this.getChildren().add(canvas);
+
+        dice = new DiceGUI();
+        stack.getChildren().addAll(canvas, dice);
+        dice.setTranslateX(canvas.getWidth()/2.55);
+        dice.setTranslateY(canvas.getHeight()/1.52);
+        this.getChildren().add(stack);
+
+
         
 //        setImageSize(l*10/12);
         createPointArray();

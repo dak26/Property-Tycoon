@@ -15,6 +15,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import gui.GameView;
 import java.io.FileNotFoundException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -40,6 +42,11 @@ public class Welcome extends Application {
         Button btn = new Button("Let's play Property Tycoon!");
         
         btn.setOnAction((ActionEvent event) -> {
+            try {
+                Game g = new Game(1);
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Welcome.class.getName()).log(Level.SEVERE, null, ex);
+            }
             primaryStage.setScene(scene2);
             primaryStage.show();
         });

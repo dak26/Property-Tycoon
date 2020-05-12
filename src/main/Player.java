@@ -5,8 +5,8 @@
  */
 package main;
 
+import Tile.Tile;
 import java.util.ArrayList;
-import space.PropertySpace;
 
 /**
  *
@@ -15,7 +15,7 @@ import space.PropertySpace;
 public class Player {
     
     private int money;
-    private ArrayList<PropertySpace> properties;
+    private ArrayList<Tile> properties;
     
     
 

@@ -6,6 +6,7 @@
 package main;
 
 import gui.BoardView;
+import java.io.FileNotFoundException;
 import java.util.LinkedList;
 
 /**
@@ -15,16 +16,18 @@ import java.util.LinkedList;
 public class Game {
     
     private BoardView gameboard;
+    private Board board;
     private static LinkedList<Player> playerLL;
     private static Player startingPlayer;
     private static Player currentPlayer;
     boolean isAbridged, isActive;
     int playersActive;
     
-    public Game (int playerCount) {
+    public Game (int playerCount) throws FileNotFoundException {
         for (int i = 0; i < playerCount; i++) {
             currentPlayer = startingPlayer;
         }
+        board = new Board();
     }
     
     public static void nextPlayer() {
