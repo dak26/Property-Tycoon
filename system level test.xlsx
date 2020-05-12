@@ -1,11 +1,14 @@
-Inputs	Expected Outputs	Actual Outputs	Pass/Fail
-NONE	New game	NONE	Fail
-None	Load stored game	NONE	Fail
-None	Rules screen	NONE	Fail
-NONE	the game is started	NONE	Fail
-NONE	open a trade screen	NONE	Fail
-NONE	stop the game	NONE	Fail
-NONE	stores the game	NONE	Fail
-NONE	open a set screen	NONE	Fail
-NONE	exit the game	NONE	Fail
-username(string) and password(string) (valid)	process to login screen	even no login function	Fail
+Test Ref	Description	    Inputs	        Expected Outputs	Actual Outputs	Pass/Fail
+1	      Click New Game	     NONE	          New game	            NONE	   Fail
+2	      Load game    	     None	          Load stored game	    NONE	   Fail
+3	      Rule	             None	          Rules screen	            NONE	   Fail
+4	      Play	             NONE	          the game is started	    NONE	   Fail
+5	      Trade	             NONE	          open a trade screen	    NONE	   Fail
+6	      Stop	             NONE	          stop the game	            NONE	   Fail
+7	      Save	             NONE	          stores the game	    NONE	   Fail
+8	      Set	             NONE	          open a set screen	    NONE	   Fail
+9	      exit	             NONE	          exit the game	            NONE	   Fail
+10	   Users enters an ID     username(string) and    process to login          even no 	   Fail
+           and password into      password(string)        screen                    login function
+ 	   login form		  (all valid)
+                                                             	
