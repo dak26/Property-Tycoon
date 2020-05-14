@@ -1,2 +1,2 @@
 # Property-Tycoon
-Software implementation of the famous board game, Monopoly.
+Software implementation version of Property Tycoon inspired by the famous board game, Monopoly.
